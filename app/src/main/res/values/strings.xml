@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">StrongWeakCurrency</string>
+
+    <string-array name="title_val">
+        <item>EUR</item>
+        <item>GBP</item>
+        <item>USD</item>
+        <item>JPY</item>
+        <item>CHF</item>
+        <item>CAD</item>
+        <item>AUD</item>
+        <item>NZD</item>
+    </string-array>
+
+    <string name="title_D1_graph">D1</string>
+    <string name="title_M15_graph">M15</string>
+    <string name="title_H1_graph">H1</string>
+    <string name="title_H4_graph">H15</string>
+
+
 </resources>
