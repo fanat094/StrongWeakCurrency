@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.PointsGraphSeries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,15 +19,21 @@ import strongweakcurrency.yamschikovdima.dima.ua.strongweakcurrency.model.GetStr
 import strongweakcurrency.yamschikovdima.dima.ua.strongweakcurrency.model.H1;
 import strongweakcurrency.yamschikovdima.dima.ua.strongweakcurrency.model.H4;
 import strongweakcurrency.yamschikovdima.dima.ua.strongweakcurrency.model.M15;
+import strongweakcurrency.yamschikovdima.dima.ua.strongweakcurrency.spreference.SharedPreferencesSafe;
 import strongweakcurrency.yamschikovdima.dima.ua.strongweakcurrency.view.GraphViewStrongWeak;
 
 public class Presenter {
 
-    List<M15> mListt;
+    List<M15> m15mList;
     List<H1> h1List;
     List<H4> h4List;
     List<D1> d1List;
     BarGraphSeries<DataPoint> series;
+
+    PointsGraphSeries<DataPoint> seriesM15;
+    PointsGraphSeries<DataPoint> seriesH1;
+    PointsGraphSeries<DataPoint> seriesH4;
+    PointsGraphSeries<DataPoint> seriesD1;
 
     private GraphViewStrongWeak view;
 
@@ -44,26 +51,25 @@ public class Presenter {
 
                 if (response.body().getM15().size() > 0) {
 
-                    mListt = new ArrayList<>();
-                    mListt = response.body().getM15();
-                    Log.d("NEWSrrrr", "" + mListt.get(1).getValue());
-                    Log.d("NEWSrrrrSize", "" + mListt.size());
+                    m15mList = new ArrayList<>();
+                    m15mList = response.body().getM15();
+                    Log.d("NEWSrrrr", "" + m15mList.get(1).getValue());
+                    Log.d("NEWSrrrrSize", "" + m15mList.size());
 
                     series = new BarGraphSeries<>(new DataPoint[]{
-                            new DataPoint(0, mListt.get(0).getValue()),
-                            new DataPoint(1, mListt.get(1).getValue()),
-                            new DataPoint(2, mListt.get(2).getValue()),
-                            new DataPoint(3, mListt.get(3).getValue()),
-                            new DataPoint(4, mListt.get(4).getValue()),
-                            new DataPoint(5, mListt.get(5).getValue()),
-                            new DataPoint(6, mListt.get(6).getValue()),
-                            new DataPoint(7, mListt.get(7).getValue())
+                            new DataPoint(0, m15mList.get(0).getValue()),
+                            new DataPoint(1, m15mList.get(1).getValue()),
+                            new DataPoint(2, m15mList.get(2).getValue()),
+                            new DataPoint(3, m15mList.get(3).getValue()),
+                            new DataPoint(4, m15mList.get(4).getValue()),
+                            new DataPoint(5, m15mList.get(5).getValue()),
+                            new DataPoint(6, m15mList.get(6).getValue()),
+                            new DataPoint(7, m15mList.get(7).getValue())
                     });
 
                     view.get_M15_graph_content(series);
 
                 }
-
             }
 
             @Override
@@ -116,7 +122,7 @@ public class Presenter {
             @Override
             public void onResponse(Call<GetStrongWeakCurrencyModel> call, Response<GetStrongWeakCurrencyModel> response) {
 
-                if (response.body().getH1().size() > 0) {
+                if (response.body().getH4().size() > 0) {
 
                     h4List = new ArrayList<>();
                     h4List = response.body().getH4();
@@ -157,7 +163,7 @@ public class Presenter {
 
                     d1List = new ArrayList<>();
                     d1List = response.body().getD1();
-                    Log.d("NEWSrrrr2", "" + d1List.get(1).getValue());
+                    Log.d("NEWSrrrrD1", "" + d1List.get(1).getValue());
                     Log.d("NEWSrrrrSize", "" + d1List.size());
 
                     series = new BarGraphSeries<>(new DataPoint[]{
@@ -183,5 +189,132 @@ public class Presenter {
             }
         });
     }
+
+    public void Aggregate_graph_content() {
+
+        App.getApi().getStrongWeakCurrencyModel().enqueue(new Callback<GetStrongWeakCurrencyModel>() {
+            @Override
+            public void onResponse(Call<GetStrongWeakCurrencyModel> call, Response<GetStrongWeakCurrencyModel> response) {
+
+                if (response.body().getM15().size() > 0) {
+
+                    m15mList = new ArrayList<>();
+                    m15mList = response.body().getM15();
+
+                    seriesM15 = new PointsGraphSeries<>(new DataPoint[]{
+                            new DataPoint(0, m15mList.get(0).getValue()),
+                            new DataPoint(1, m15mList.get(1).getValue()),
+                            new DataPoint(2, m15mList.get(2).getValue()),
+                            new DataPoint(3, m15mList.get(3).getValue()),
+                            new DataPoint(4, m15mList.get(4).getValue()),
+                            new DataPoint(5, m15mList.get(5).getValue()),
+                            new DataPoint(6, m15mList.get(6).getValue()),
+                            new DataPoint(7, m15mList.get(7).getValue())
+                    });
+
+                }
+
+                if (response.body().getH1().size() > 0) {
+
+                    h1List = new ArrayList<>();
+                    h1List = response.body().getH1();
+
+                    seriesH1 = new PointsGraphSeries<>(new DataPoint[]{
+                            new DataPoint(0, h1List.get(0).getValue()),
+                            new DataPoint(1, h1List.get(1).getValue()),
+                            new DataPoint(2, h1List.get(2).getValue()),
+                            new DataPoint(3, h1List.get(3).getValue()),
+                            new DataPoint(4, h1List.get(4).getValue()),
+                            new DataPoint(5, h1List.get(5).getValue()),
+                            new DataPoint(6, h1List.get(6).getValue()),
+                            new DataPoint(7, h1List.get(7).getValue())
+                    });
+
+                }
+
+                if (response.body().getH4().size() > 0) {
+
+                    h4List = new ArrayList<>();
+                    h4List = response.body().getH4();
+
+                    seriesH4 = new PointsGraphSeries<>(new DataPoint[]{
+                            new DataPoint(0, h4List.get(0).getValue()),
+                            new DataPoint(1, h4List.get(1).getValue()),
+                            new DataPoint(2, h4List.get(2).getValue()),
+                            new DataPoint(3, h4List.get(3).getValue()),
+                            new DataPoint(4, h4List.get(4).getValue()),
+                            new DataPoint(5, h4List.get(5).getValue()),
+                            new DataPoint(6, h4List.get(6).getValue()),
+                            new DataPoint(7, h4List.get(7).getValue())
+                    });
+
+                }
+
+                if (response.body().getD1().size() > 0) {
+
+                    d1List = new ArrayList<>();
+                    d1List = response.body().getD1();
+
+                    seriesD1 = new PointsGraphSeries<>(new DataPoint[]{
+                            new DataPoint(0, d1List.get(0).getValue()),
+                            new DataPoint(1, d1List.get(1).getValue()),
+                            new DataPoint(2, d1List.get(2).getValue()),
+                            new DataPoint(3, d1List.get(3).getValue()),
+                            new DataPoint(4, d1List.get(4).getValue()),
+                            new DataPoint(5, d1List.get(5).getValue()),
+                            new DataPoint(6, d1List.get(6).getValue()),
+                            new DataPoint(7, d1List.get(7).getValue())
+                    });
+
+                }
+                view.get_Aggregate_graph_content(seriesM15, seriesH1, seriesH4, seriesD1);
+
+            }
+
+            @Override
+            public void onFailure(Call<GetStrongWeakCurrencyModel> call, Throwable t) {
+
+            }
+        });
+    }
+
+    //service
+
+    public void M15_graph_service() {
+
+        App.getApi().getStrongWeakCurrencyModel().enqueue(new Callback<GetStrongWeakCurrencyModel>() {
+            @Override
+            public void onResponse(Call<GetStrongWeakCurrencyModel> call, Response<GetStrongWeakCurrencyModel> response) {
+
+                if (response.body().getM15().size() > 0) {
+
+                    m15mList = new ArrayList<>();
+                    m15mList = response.body().getM15();
+                }
+
+               // convertarr(mListt);
+                new SharedPreferencesSafe().allres(App.getContext(), m15mList);
+                Log.d("DATA SERV", "111111111");
+            }
+
+            @Override
+            public void onFailure(Call<GetStrongWeakCurrencyModel> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public List<Integer> convertarr (List<M15> list){
+
+        List<Integer> arrvalue = new ArrayList<>(list.size());
+        for (int i=0; i<list.size(); i++) {
+
+            arrvalue.add(list.get(i).getValue());
+            Log.d("ARRRRRRR", ""+arrvalue.get(i));
+        }
+        return arrvalue;
+    }
+
+
 }
 

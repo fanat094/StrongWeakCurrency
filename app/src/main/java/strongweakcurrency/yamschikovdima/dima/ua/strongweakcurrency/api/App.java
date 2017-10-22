@@ -1,6 +1,7 @@
 package strongweakcurrency.yamschikovdima.dima.ua.strongweakcurrency.api;
 
 import android.app.Application;
+import android.content.Context;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -12,9 +13,16 @@ public class App extends Application {
     static APIClient strongweakApi;
     private Retrofit retrofit;
 
+    private static Context context;
+
+    public static Context getContext() {
+        return context;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        context = getApplicationContext();
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor()
                 .setLevel(HttpLoggingInterceptor.Level.BODY);
