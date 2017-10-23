@@ -6,12 +6,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import strongweakcurrency.yamschikovdima.dima.ua.strongweakcurrency.MainActivity;
 import strongweakcurrency.yamschikovdima.dima.ua.strongweakcurrency.R;
@@ -19,8 +17,8 @@ import strongweakcurrency.yamschikovdima.dima.ua.strongweakcurrency.presenter.Pr
 
 public class StrongWeakService extends IntentService {
 
-    private static final String TAG = "StrongWeakService";
-    private static final int POLL_INTERVAL = 5000 * 60; // 60 секунд1
+    private static final String TAG = StrongWeakService.class.getName();
+    private static final int POLL_INTERVAL = 5000 * 60; // 5 хв (інтервал зверення до данних)
 
     public static Intent newIntent(Context context) {
         return new Intent(context, StrongWeakService.class);
@@ -31,17 +29,15 @@ public class StrongWeakService extends IntentService {
     }
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.i(TAG, "Received an intent: " + intent);
 
-        new Presenter().M15_graph_service();
-        addNotification();
+        addNotification(); //засуск сповіщення
 
-        if (!isNetworkAvailableAndConnected()) {
+        if (!isNetworkAvailableAndConnected()) { //перевірка мереєі Інтернет
             return;
         }
     }
 
-    private boolean isNetworkAvailableAndConnected() {
+    private boolean isNetworkAvailableAndConnected() { //процедура перевірка мереєі Інтернет
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         boolean isNetworkAvailable = cm.getActiveNetworkInfo() != null;
@@ -50,7 +46,7 @@ public class StrongWeakService extends IntentService {
         return isNetworkConnected;
     }
 
-    public static void setServiceAlarm(Context context, boolean isOn) {
+    public static void setServiceAlarm(Context context, boolean isOn) { //процедура повторення сервісу
         Intent i = StrongWeakService.newIntent(context);
         PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
         AlarmManager alarmManager = (AlarmManager)
@@ -64,25 +60,31 @@ public class StrongWeakService extends IntentService {
             alarmManager.cancel(pi);
             pi.cancel();
         }
+
     }
 
-    private void addNotification() {
+    private void addNotification() { //процедура сповіщення
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.ic_strongweak)
-                        .setContentTitle("New StrongWeak data")
+                        .setContentTitle(getString(R.string.notificationstrongwegtitle))
                         .setSound(Uri.EMPTY)
-                        .setLights(Color.BLUE, 3000, 3000)
                         .setAutoCancel(true)
-                        .setContentText("Refresh data every five minutes");
+                        .setContentText(getString(R.string.otificationstrongweakcontent));
 
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(contentIntent);
 
-        // Add as notification
+        // додавання сповіщення
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(0, builder.build());
+
+        new Presenter().M15_graph_service(); //запуск процедури запиту даних дл діаграми і запису даних в SharedPrefence
+        new Presenter().H1_graph_service();
+        new Presenter().H4_graph_service();
+        new Presenter().D1_graph_service();
+        new Presenter().SymbolIndex_graph_service();
     }
 }

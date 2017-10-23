@@ -30,11 +30,11 @@ public class App extends Application {
         httpClient.addInterceptor(logging);
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://34.197.213.118:20019/") //Базовая часть адреса
-                .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
+                .baseUrl("http://34.197.213.118:20019/") //Базовая частина адреси
+                .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необхідний для для перетвореняня JSON'а в обєкти
                 .client(httpClient.build())
                 .build();
-        strongweakApi = retrofit.create(APIClient.class); //Создаем объект, при помощи которого будем выполнять запросы
+        strongweakApi = retrofit.create(APIClient.class); // Объект, за допомогою якого киконуються запити
     }
 
     public static APIClient getApi() {

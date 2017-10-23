@@ -17,6 +17,8 @@
     <string name="title_H1_graph">H1</string>
     <string name="title_H4_graph">H4</string>
     <string name="title_Aggregate_graph">Aggregate</string>
+    <string name="notificationstrongwegtitle">New StrongWeak data</string>
+    <string name="otificationstrongweakcontent">Refresh data every five minutes</string>
 
 
 </resources>

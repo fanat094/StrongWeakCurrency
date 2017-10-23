@@ -6,7 +6,6 @@ import strongweakcurrency.yamschikovdima.dima.ua.strongweakcurrency.model.GetStr
 
 public interface APIClient {
 
-    @GET("fxservice/strongweak")
+    @GET("fxservice/strongweak") ////метод запиту
     Call<GetStrongWeakCurrencyModel> getStrongWeakCurrencyModel();
-
 }
